@@ -19,9 +19,13 @@ public class AuthorService {
     private AuthorMapper authorMapper;
 
     @Transactional
-    public AuthorModel createAuthpr(AuthorVo authorVo) {
+    public AuthorModel createAuthor(AuthorVo authorVo) {
         AuthorModel authorModel = authorMapper.voToModel(authorVo);
         return authorRepository.save(authorModel);
+    }
+
+    public AuthorModel updateAuthor(AuthorVo authorVo) {
+        return createAuthor(authorVo);
     }
 
     public AuthorVo getAuthor(Long authorId) {

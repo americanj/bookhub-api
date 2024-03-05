@@ -5,6 +5,7 @@ import com.bookhub.domain.request.AuthorRequest;
 import com.bookhub.domain.response.AuthorResponse;
 import com.bookhub.domain.vo.AuthorVo;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -26,4 +27,9 @@ public abstract class AuthorMapper {
     public List<AuthorResponse> vosToResponses(List<AuthorVo> authorVos) {
         return authorVos.stream().map(this::voToResponse).collect(Collectors.toList());
     }
+
+    @Mapping(target = "id", source = "authorId")
+    public abstract AuthorVo resquestToVo(AuthorRequest authorRequest, Long authorId);
+
+    public abstract AuthorResponse modelToResponse(AuthorModel author);
 }

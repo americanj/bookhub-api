@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -44,14 +45,23 @@ public class AuthorController {
     public AuthorResponse getAuthor(@PathVariable Long authorId) {
         AuthorVo authorVo = authorService.getAuthor(authorId);
         return authorMapper.voToResponse(authorVo);
-
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public AuthorModel createAuthor(@RequestBody AuthorRequest authorRequest) {
+    public AuthorResponse createAuthor(@RequestBody AuthorRequest authorRequest) {
         AuthorVo authorVo = authorMapper.requestToVo(authorRequest);
-        return authorService.createAuthpr(authorVo);
+        AuthorModel authorModel = authorService.createAuthor(authorVo);
+        return authorMapper.modelToResponse(authorModel);
+    }
+
+    @PutMapping("/{authorId}")
+    @ResponseStatus(HttpStatus.OK)
+    public AuthorResponse updateAuthor(@PathVariable Long authorId, @RequestBody AuthorRequest authorRequest) {
+        authorRepository.findByIdOrThrowException(authorId);
+        AuthorVo authorVo = authorMapper.resquestToVo(authorRequest, authorId);
+        AuthorModel authorModel = authorService.updateAuthor(authorVo);
+        return authorMapper.modelToResponse(authorModel);
     }
 
 }
