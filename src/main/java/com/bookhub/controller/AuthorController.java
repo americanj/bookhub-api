@@ -52,17 +52,15 @@ public class AuthorController {
     @ResponseStatus(HttpStatus.CREATED)
     public AuthorResponse createAuthor(@RequestBody AuthorRequest authorRequest) {
         AuthorVo authorVo = authorMapper.requestToVo(authorRequest);
-        AuthorModel authorModel = authorService.createAuthor(authorVo);
-        return authorMapper.modelToResponse(authorModel);
+        authorVo = authorService.createAuthor(authorVo);
+        return authorMapper.voToResponse(authorVo);
     }
 
     @PutMapping("/{authorId}")
     @ResponseStatus(HttpStatus.OK)
     public AuthorResponse updateAuthor(@PathVariable Long authorId, @RequestBody AuthorRequest authorRequest) {
-        //authorRepository.findByIdOrThrowException(authorId);
-        AuthorVo authorVo = authorMapper.resquestToVo(authorRequest, authorId);
-        AuthorModel authorModel = authorService.updateAuthor(authorVo, authorId);
-        return authorMapper.modelToResponse(authorModel);
+        AuthorVo authorVo = authorService.updateAuthor(authorId, authorRequest);
+        return authorMapper.voToResponse(authorVo);
     }
 
     @DeleteMapping("/{authorId}")

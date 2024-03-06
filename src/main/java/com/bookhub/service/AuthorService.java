@@ -2,6 +2,7 @@ package com.bookhub.service;
 
 import com.bookhub.domain.mapper.AuthorMapper;
 import com.bookhub.domain.model.AuthorModel;
+import com.bookhub.domain.request.AuthorRequest;
 import com.bookhub.domain.vo.AuthorVo;
 import com.bookhub.repository.AuthorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,13 +20,14 @@ public class AuthorService {
     private AuthorMapper authorMapper;
 
     @Transactional
-    public AuthorModel createAuthor(AuthorVo authorVo) {
+    public AuthorVo createAuthor(AuthorVo authorVo) {
         AuthorModel authorModel = authorMapper.voToModel(authorVo);
-        return authorRepository.save(authorModel);
+        return authorMapper.modelToVo(authorRepository.save(authorModel));
     }
 
-    public AuthorModel updateAuthor(AuthorVo authorVo, Long authorId) {
+    public AuthorVo updateAuthor(Long authorId, AuthorRequest authorRequest) {
         authorRepository.findByIdOrThrowException(authorId);
+        AuthorVo authorVo = authorMapper.resquestToVo(authorRequest, authorId);
         return createAuthor(authorVo);
     }
 
