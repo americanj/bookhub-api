@@ -11,6 +11,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.io.Serializable;
+import java.util.Objects;
 
 @Data
 @NoArgsConstructor
@@ -31,6 +32,16 @@ public class BookModel implements Serializable {
     private String isbn;
 
     @ManyToOne
-    @JoinColumn(name = "author_id", nullable = false)
+    @JoinColumn(name = "author_id", nullable = true)
     private AuthorModel author;
+
+    public void toRemoveAuthorFromBook() {
+        this.setAuthor(null);
+    }
+
+    public Boolean authorIsNull() {
+        Boolean isNull = false;
+        if (Objects.isNull(getAuthor())) isNull = true;
+        return isNull;
+    }
 }

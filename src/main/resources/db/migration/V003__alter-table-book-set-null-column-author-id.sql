@@ -1,0 +1,1 @@
+ALTER TABLE book MODIFY COLUMN author_id bigint DEFAULT NULL;
