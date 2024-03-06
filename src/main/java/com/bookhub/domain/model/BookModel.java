@@ -31,6 +31,16 @@ public class BookModel implements Serializable {
     private String isbn;
 
     @ManyToOne
-    @JoinColumn(name = "author_id", nullable = false)
+    @JoinColumn(name = "author_id", nullable = true)
     private AuthorModel author;
+
+    public void toRemoveAuthor() {
+        this.setAuthor(null);
+    }
+
+    public Boolean authorIsNull() {
+        Boolean isNull = false;
+        if (getAuthor() == null) isNull = true;
+        return isNull;
+    }
 }
