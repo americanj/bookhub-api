@@ -6,7 +6,7 @@ Para rodar o projeto de forma correta siga os passos a seguir:
 
 - Ter instalado o banco de dados MariaDB versão 11.3.2 (porta 3306).
 - Após instalado, rode o Script abaixo como administrador do banco de dados (root).
-```sh
+```sql
 CREATE DATABASE bookhub_db;
 
 CREATE USER bookhub_admin@localhost IDENTIFIED BY 'admin';
