@@ -1,4 +1,4 @@
-package com.bookhub.domain.exception.response;
+package com.bookhub.domain.response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;

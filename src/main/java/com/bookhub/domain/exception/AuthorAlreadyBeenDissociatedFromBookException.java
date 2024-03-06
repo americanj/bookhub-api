@@ -13,6 +13,6 @@ public class AuthorAlreadyBeenDissociatedFromBookException extends BusinessExcep
     }
 
     public AuthorAlreadyBeenDissociatedFromBookException(Long bookId) {
-        this(String.format("O livro de código: %d. Não possui autor vinculado!", bookId));
+        this(String.format("O livro de código: %d não possui autor vinculado!", bookId));
     }
 }

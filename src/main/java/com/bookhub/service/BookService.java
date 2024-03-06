@@ -22,8 +22,8 @@ public class BookService {
     @Transactional
     public void disassociateAuthorFromBook(@PathVariable Long bookId) {
         BookModel bookModel = bookRepository.findByIdOrThrowException(bookId);
-        if (bookModel.authorIsNull()) throw new AuthorAlreadyBeenDissociatedFromBookException(bookId);
-        bookModel.toRemoveAuthor();
+        if (Boolean.TRUE.equals(bookModel.authorIsNull())) throw new AuthorAlreadyBeenDissociatedFromBookException(bookId);
+        bookModel.toRemoveAuthorFromBook();
         bookRepository.save(bookModel);
     }
 }

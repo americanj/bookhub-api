@@ -4,7 +4,7 @@ import com.bookhub.domain.exception.AuthorAlreadyBeenDissociatedFromBookExceptio
 import com.bookhub.domain.exception.AuthorInUseException;
 import com.bookhub.domain.exception.AuthorNotFoundException;
 import com.bookhub.domain.exception.BookNotFoundException;
-import com.bookhub.domain.exception.response.ExceptionResponse;
+import com.bookhub.domain.response.ExceptionResponse;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

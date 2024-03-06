@@ -4,7 +4,7 @@
 
 Para rodar o projeto de forma correta siga os passos a seguir:
 
-- Ter instalado o banco de dados MariaDB (porta 3306).
+- Ter instalado o banco de dados MariaDB versão 11.3.2 (porta 3306).
 - Após instalado, rode o Script abaixo como administrador do banco de dados (root).
 ```sh
 CREATE DATABASE bookhub_db;
@@ -18,6 +18,11 @@ FLUSH PRIVILEGES;
 spring.profiles.active=dev
 ```
 
+## Possíveis Alterações
+- [ ] No `AuthorMapper` fazer o mapstructure mapear os objetos objetos de lista sozinho, sem precisar de implementação manual.
+
+
 **Desenvolvido Igor de Oliveira**
+
 
 
