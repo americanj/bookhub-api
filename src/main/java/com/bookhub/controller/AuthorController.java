@@ -9,6 +9,7 @@ import com.bookhub.repository.AuthorRepository;
 import com.bookhub.service.AuthorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -58,10 +59,16 @@ public class AuthorController {
     @PutMapping("/{authorId}")
     @ResponseStatus(HttpStatus.OK)
     public AuthorResponse updateAuthor(@PathVariable Long authorId, @RequestBody AuthorRequest authorRequest) {
-        authorRepository.findByIdOrThrowException(authorId);
+        //authorRepository.findByIdOrThrowException(authorId);
         AuthorVo authorVo = authorMapper.resquestToVo(authorRequest, authorId);
-        AuthorModel authorModel = authorService.updateAuthor(authorVo);
+        AuthorModel authorModel = authorService.updateAuthor(authorVo, authorId);
         return authorMapper.modelToResponse(authorModel);
+    }
+
+    @DeleteMapping("/{authorId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteAuthor(@PathVariable Long authorId) {
+        authorService.deleteAuthor(authorId);
     }
 
 }

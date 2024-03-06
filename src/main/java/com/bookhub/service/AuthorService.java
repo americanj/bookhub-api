@@ -24,7 +24,8 @@ public class AuthorService {
         return authorRepository.save(authorModel);
     }
 
-    public AuthorModel updateAuthor(AuthorVo authorVo) {
+    public AuthorModel updateAuthor(AuthorVo authorVo, Long authorId) {
+        authorRepository.findByIdOrThrowException(authorId);
         return createAuthor(authorVo);
     }
 
@@ -37,5 +38,11 @@ public class AuthorService {
         List<AuthorModel> authorModels = authorRepository.findAll();
         return authorMapper.modelsToVos(authorModels);
 
+    }
+
+    @Transactional
+    public void deleteAuthor(Long authorId) {
+        AuthorModel authorModel = authorRepository.findByIdOrThrowException(authorId);
+        authorRepository.delete(authorModel);
     }
 }
