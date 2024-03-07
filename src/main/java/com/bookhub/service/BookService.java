@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
+import java.util.List;
 
 @Service
 public class BookService {
@@ -31,5 +32,10 @@ public class BookService {
     public BookVo getBook(Long bookId) {
         BookModel bookModel = bookRepository.findByIdOrThrowException(bookId);
         return bookMapper.modelToVo(bookModel);
+    }
+
+    public List<BookVo> getBooks() {
+        List<BookModel> bookModels = bookRepository.findAll();
+        return bookMapper.modelsToVos(bookModels);
     }
 }

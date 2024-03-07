@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/books")
@@ -35,6 +36,13 @@ public class BookController {
     public BookResponse getBook(@PathVariable Long bookId) {
         BookVo bookVo = bookService.getBook(bookId);
         return bookMapper.voToResponse(bookVo);
+    }
+
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    public List<BookResponse> getBooks() {
+        List<BookVo> bookVos = bookService.getBooks();
+        return bookMapper.vosToResponses(bookVos);
     }
 
 }
