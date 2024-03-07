@@ -21,7 +21,7 @@ spring.profiles.active=dev
 ```
 
 ## Possíveis Alterações
-- [ ] No `AuthorMapper` fazer o mapstructure mapear os objetos de lista sozinho, sem precisar de implementação manual.
+- [ ] No `AuthorMapper` fazer o mapstruct mapear os objetos de lista sozinho, sem precisar de implementação manual.
 
 
 **Desenvolvido por: `Igor de Oliveira`**
