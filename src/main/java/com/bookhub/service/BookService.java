@@ -31,8 +31,7 @@ public class BookService {
     @Transactional
     public void disassociateAuthorFromBook(@PathVariable Long bookId) {
         BookModel bookModel = bookRepository.findByIdOrThrowException(bookId);
-        if (Boolean.TRUE.equals(bookModel.authorIsNull()))
-            throw new AuthorAlreadyBeenDissociatedFromBookException(bookId);
+        if (Boolean.TRUE.equals(bookModel.authorIsNull())) throw new AuthorAlreadyBeenDissociatedFromBookException(bookId);
         bookModel.toRemoveAuthorFromBook();
         bookRepository.save(bookModel);
     }
@@ -57,5 +56,19 @@ public class BookService {
     }
 
 
+    @Transactional
+    public BookVo toUpdateBook(BookRequest bookRequest, Long bookId) {
+        bookRepository.findByIdOrThrowException(bookId);
+        AuthorModel authorModel = authorRepository.findByIdOrThrowException(bookRequest.getAuthor().getId());
 
+        BookModel bookModel = bookMapper.requestToModel(bookRequest, bookId);
+        bookModel.setAuthor(authorModel);
+        bookModel = bookRepository.save(bookModel);
+
+        System.out.println("model " + bookModel);
+
+        BookVo bookVo = bookMapper.modelToVo(bookModel);
+        System.out.println("bookVo " + bookVo);
+        return bookVo;
+    }
 }
