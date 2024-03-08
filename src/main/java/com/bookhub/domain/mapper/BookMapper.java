@@ -1,6 +1,7 @@
 package com.bookhub.domain.mapper;
 
 import com.bookhub.domain.model.BookModel;
+import com.bookhub.domain.request.BookRequest;
 import com.bookhub.domain.response.BookResponse;
 import com.bookhub.domain.vo.BookVo;
 import org.mapstruct.Mapper;
@@ -17,6 +18,8 @@ public abstract class BookMapper {
 
     public abstract BookResponse voToResponse(BookVo bookVo);
 
+    public abstract BookResponse voToResponse2(BookVo bookVo);
+
     public List<BookVo> modelsToVos(List<BookModel> bookModels) {
         return bookModels.stream().map(this::modelToVo).collect(Collectors.toList());
     }
@@ -24,4 +27,10 @@ public abstract class BookMapper {
     public List<BookResponse> vosToResponses(List<BookVo> bookVos) {
         return bookVos.stream().map(this::voToResponse).collect(Collectors.toList());
     }
+
+    public abstract BookVo requestToVo(BookRequest bookRequest);
+
+    public abstract BookModel voToModel(BookVo bookVo);
+
+    public abstract BookModel requestToModel(BookRequest bookRequest);
 }

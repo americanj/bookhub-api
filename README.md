@@ -22,6 +22,7 @@ spring.profiles.active=dev
 
 ## Possíveis Alterações
 - [ ] No `AuthorMapper` fazer o mapstruct mapear os objetos de lista sozinho, sem precisar de implementação manual.
+- [ ] Passar tipo requests e conversões para as classes de serviços. 
 
 
 **Desenvolvido por: `Igor de Oliveira`**
