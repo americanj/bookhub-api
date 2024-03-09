@@ -1,0 +1,4 @@
+ALTER TABLE book
+ADD COLUMN stock_id BIGINT,
+ADD CONSTRAINT stock_id
+FOREIGN KEY (stock_id) REFERENCES stock(id);

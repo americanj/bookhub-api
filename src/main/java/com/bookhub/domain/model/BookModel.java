@@ -7,6 +7,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -34,6 +35,10 @@ public class BookModel implements Serializable {
     @ManyToOne
     @JoinColumn(name = "author_id", nullable = true)
     private AuthorModel author;
+
+    @OneToOne
+    @JoinColumn(name = "stock_id", nullable = true)
+    private StockModel stock;
 
     public void toRemoveAuthorFromBook() {
         this.setAuthor(null);
