@@ -7,6 +7,7 @@ import com.bookhub.domain.vo.BookVo;
 import com.bookhub.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,7 +31,7 @@ public class BookController {
 
 
     @ResponseStatus(HttpStatus.OK)
-    @DeleteMapping("/{bookId}/disassociate-author")
+    @DeleteMapping("/{bookId}/to-remove-author")
     public void dissociateAuthor(@PathVariable Long bookId) {
         bookService.disassociateAuthorFromBook(bookId);
     }
@@ -61,6 +62,13 @@ public class BookController {
     public BookResponse toUpdateBook(@PathVariable Long bookId, @RequestBody BookRequest bookRequest) {
         BookVo bookVo = bookService.toUpdateBook(bookRequest, bookId);
         return bookMapper.voToResponse(bookVo);
+    }
+
+    @DeleteMapping("/{bookId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public ResponseEntity<Void> toDeleteBook(@PathVariable Long bookId) {
+        bookService.toDeleteBook(bookId);
+        return ResponseEntity.noContent().build();
     }
 
 }

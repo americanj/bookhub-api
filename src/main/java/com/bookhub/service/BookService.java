@@ -71,4 +71,10 @@ public class BookService {
         System.out.println("bookVo " + bookVo);
         return bookVo;
     }
+
+    @Transactional
+    public void toDeleteBook(Long bookId) {
+        BookModel bookModel = bookRepository.findByIdOrThrowException(bookId);
+        bookRepository.delete(bookModel);
+    }
 }

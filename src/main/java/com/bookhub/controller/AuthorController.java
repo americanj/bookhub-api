@@ -29,8 +29,6 @@ public class AuthorController {
     @Autowired
     private AuthorMapper authorMapper;
 
-    @Autowired
-    private AuthorRepository authorRepository;
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
