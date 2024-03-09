@@ -55,21 +55,14 @@ public class BookService {
         return bookMapper.modelToVo(bookModel);
     }
 
-
     @Transactional
     public BookVo toUpdateBook(BookRequest bookRequest, Long bookId) {
         bookRepository.findByIdOrThrowException(bookId);
         AuthorModel authorModel = authorRepository.findByIdOrThrowException(bookRequest.getAuthor().getId());
-
         BookModel bookModel = bookMapper.requestToModel(bookRequest, bookId);
         bookModel.setAuthor(authorModel);
         bookModel = bookRepository.save(bookModel);
-
-        System.out.println("model " + bookModel);
-
-        BookVo bookVo = bookMapper.modelToVo(bookModel);
-        System.out.println("bookVo " + bookVo);
-        return bookVo;
+        return bookMapper.modelToVo(bookModel);
     }
 
     @Transactional
