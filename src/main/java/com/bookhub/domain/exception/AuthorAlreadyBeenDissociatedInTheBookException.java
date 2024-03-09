@@ -4,15 +4,15 @@ package com.bookhub.domain.exception;
 import lombok.Getter;
 
 @Getter
-public class AuthorAlreadyBeenDissociatedFromBookException extends BusinessException {
+public class AuthorAlreadyBeenDissociatedInTheBookException extends BusinessException {
 
     private static final long serialVersionUID = 1L;
 
-    public AuthorAlreadyBeenDissociatedFromBookException(String message) {
+    public AuthorAlreadyBeenDissociatedInTheBookException(String message) {
         super(message);
     }
 
-    public AuthorAlreadyBeenDissociatedFromBookException(Long bookId) {
+    public AuthorAlreadyBeenDissociatedInTheBookException(Long bookId) {
         this(String.format("O livro de código: %d não possui autor vinculado!", bookId));
     }
 }

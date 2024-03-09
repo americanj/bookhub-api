@@ -1,6 +1,7 @@
 package com.bookhub.service;
 
-import com.bookhub.domain.exception.AuthorAlreadyBeenDissociatedFromBookException;
+import com.bookhub.domain.exception.AuthorAlreadyBeenDissociatedInTheBookException;
+import com.bookhub.domain.exception.AuthorAlreadyBeenSociatedInTheBookException;
 import com.bookhub.domain.mapper.BookMapper;
 import com.bookhub.domain.model.AuthorModel;
 import com.bookhub.domain.model.BookModel;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class BookService {
@@ -29,9 +31,9 @@ public class BookService {
 
 
     @Transactional
-    public void disassociateAuthorFromBook(@PathVariable Long bookId) {
+    public void dissociateAuthorInTheBook(@PathVariable Long bookId) {
         BookModel bookModel = bookRepository.findByIdOrThrowException(bookId);
-        if (Boolean.TRUE.equals(bookModel.authorIsNull())) throw new AuthorAlreadyBeenDissociatedFromBookException(bookId);
+        if (Boolean.TRUE.equals(bookModel.authorIsNull())) throw new AuthorAlreadyBeenDissociatedInTheBookException(bookId);
         bookModel.toRemoveAuthorFromBook();
         bookRepository.save(bookModel);
     }
@@ -70,4 +72,22 @@ public class BookService {
         BookModel bookModel = bookRepository.findByIdOrThrowException(bookId);
         bookRepository.delete(bookModel);
     }
+
+    @Transactional
+    public void associateAuthorInTheBook(Long bookId, Long authorId) {
+        BookModel bookModel = bookRepository.findByIdOrThrowException(bookId);
+        AuthorModel authorModel = authorRepository.findByIdOrThrowException(authorId);
+        if (Objects.nonNull(bookModel.getAuthor())) {
+            if (bookModel.getAuthor().getId() == authorId) {
+                throw new AuthorAlreadyBeenSociatedInTheBookException(bookId);
+            } else {
+                bookModel.setAuthor(authorModel);
+                bookRepository.save(bookModel);
+            }
+        } else {
+            bookModel.setAuthor(authorModel);
+            bookRepository.save(bookModel);
+        }
+    }
+
 }

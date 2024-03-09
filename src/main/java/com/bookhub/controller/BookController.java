@@ -33,7 +33,7 @@ public class BookController {
     @ResponseStatus(HttpStatus.OK)
     @DeleteMapping("/{bookId}/to-remove-author")
     public void dissociateAuthor(@PathVariable Long bookId) {
-        bookService.disassociateAuthorFromBook(bookId);
+        bookService.dissociateAuthorInTheBook(bookId);
     }
 
     @GetMapping("/{bookId}")
@@ -69,6 +69,13 @@ public class BookController {
     public ResponseEntity<Void> toDeleteBook(@PathVariable Long bookId) {
         bookService.toDeleteBook(bookId);
         return ResponseEntity.noContent().build();
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @PutMapping("/{bookId}/to-add-author/{authorId}")
+    public ResponseEntity<Void> sociateAuthor(@PathVariable Long bookId, @PathVariable Long authorId) {
+        bookService.associateAuthorInTheBook(bookId, authorId);
+        return ResponseEntity.ok().build();
     }
 
 }
