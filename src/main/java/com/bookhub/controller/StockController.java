@@ -9,11 +9,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-
 import java.util.List;
 
 @RestController
@@ -43,8 +43,15 @@ public class StockController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
-    public StockResponse toCreateStock(@RequestParam Integer quantity, @RequestParam Boolean active) {
-        StockVo stockVo = stockService.toCreateStock(quantity, active);
+    public StockResponse createStock(@RequestParam Integer quantity, @RequestParam Boolean active) {
+        StockVo stockVo = stockService.createStock(quantity, active);
+        return stockMapper.voToResponse(stockVo);
+    }
+
+    @PutMapping("/{stockId}")
+    @ResponseStatus(HttpStatus.OK)
+    public StockResponse updateStock(@PathVariable Long stockId, @RequestParam Integer quantity, @RequestParam Boolean active) {
+        StockVo stockVo = stockService.updateStock(stockId, quantity, active);
         return stockMapper.voToResponse(stockVo);
     }
 }

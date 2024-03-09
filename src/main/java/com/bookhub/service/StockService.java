@@ -30,8 +30,17 @@ public class StockService {
     }
 
     @Transactional
-    public StockVo toCreateStock(Integer quantity, Boolean active) {
+    public StockVo createStock(Integer quantity, Boolean active) {
         StockModel stockModel = new StockModel();
+        stockModel.setQuantity(quantity);
+        stockModel.setActive(active);
+        stockModel = stockRepository.save(stockModel);
+        return stockMapper.modelToVo(stockModel);
+    }
+
+    @Transactional
+    public StockVo updateStock(Long stockId, Integer quantity, Boolean active) {
+        StockModel stockModel = stockRepository.findByIdOrThrowException(stockId);
         stockModel.setQuantity(quantity);
         stockModel.setActive(active);
         stockModel = stockRepository.save(stockModel);
