@@ -29,8 +29,6 @@ public class AuthorController {
     @Autowired
     private AuthorMapper authorMapper;
 
-    @Autowired
-    private AuthorRepository authorRepository;
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
@@ -67,5 +65,4 @@ public class AuthorController {
     public void deleteAuthor(@PathVariable Long authorId) {
         authorService.deleteAuthor(authorId);
     }
-
 }

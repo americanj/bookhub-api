@@ -1,6 +1,7 @@
 package com.bookhub.domain.exception.handler;
 
-import com.bookhub.domain.exception.AuthorAlreadyBeenDissociatedFromBookException;
+import com.bookhub.domain.exception.AuthorAlreadyBeenDissociatedInTheBookException;
+import com.bookhub.domain.exception.AuthorAlreadyBeenSociatedInTheBookException;
 import com.bookhub.domain.exception.AuthorInUseException;
 import com.bookhub.domain.exception.AuthorNotFoundException;
 import com.bookhub.domain.exception.BookNotFoundException;
@@ -35,8 +36,14 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(exceptionResponse);
     }
 
-    @ExceptionHandler(AuthorAlreadyBeenDissociatedFromBookException.class)
-    public ResponseEntity<ExceptionResponse> authorNotFound(AuthorAlreadyBeenDissociatedFromBookException exception) {
+    @ExceptionHandler(AuthorAlreadyBeenDissociatedInTheBookException.class)
+    public ResponseEntity<ExceptionResponse> authorNotFound(AuthorAlreadyBeenDissociatedInTheBookException exception) {
+        ExceptionResponse exceptionResponse = new ExceptionResponse(exception.getMessage(), LocalDateTime.now());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exceptionResponse);
+    }
+
+    @ExceptionHandler(AuthorAlreadyBeenSociatedInTheBookException.class)
+    public ResponseEntity<ExceptionResponse> authorNotFound(AuthorAlreadyBeenSociatedInTheBookException exception) {
         ExceptionResponse exceptionResponse = new ExceptionResponse(exception.getMessage(), LocalDateTime.now());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exceptionResponse);
     }
