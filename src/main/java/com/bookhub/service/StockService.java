@@ -46,4 +46,10 @@ public class StockService {
         stockModel = stockRepository.save(stockModel);
         return stockMapper.modelToVo(stockModel);
     }
+
+    @Transactional
+    public void deleteStock(Long stockId) {
+        StockModel stockModel = stockRepository.findByIdOrThrowException(stockId);
+        stockRepository.delete(stockModel);
+    }
 }

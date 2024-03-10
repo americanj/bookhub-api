@@ -6,6 +6,8 @@ import com.bookhub.domain.vo.StockVo;
 import com.bookhub.service.StockService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -53,5 +55,12 @@ public class StockController {
     public StockResponse updateStock(@PathVariable Long stockId, @RequestParam Integer quantity, @RequestParam Boolean active) {
         StockVo stockVo = stockService.updateStock(stockId, quantity, active);
         return stockMapper.voToResponse(stockVo);
+    }
+
+    @DeleteMapping("/{stockId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public ResponseEntity<Void> deleteStock(@PathVariable Long stockId) {
+        stockService.deleteStock(stockId);
+        return ResponseEntity.noContent().build();
     }
 }
