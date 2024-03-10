@@ -25,5 +25,4 @@ public abstract class AuthorMapper {
     }
     @Mapping(target = "id", source = "authorId")
     public abstract AuthorVo resquestToVo(AuthorRequest authorRequest, Long authorId);
-    public abstract AuthorResponse modelToResponse(AuthorModel author);
 }
