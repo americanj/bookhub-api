@@ -4,8 +4,8 @@ import com.bookhub.domain.mapper.AuthorMapper;
 import com.bookhub.domain.request.AuthorRequest;
 import com.bookhub.domain.response.AuthorResponse;
 import com.bookhub.domain.vo.AuthorVo;
-import com.bookhub.repository.AuthorRepository;
 import com.bookhub.service.AuthorService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -47,7 +47,7 @@ public class AuthorController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public AuthorResponse createAuthor(@RequestBody AuthorRequest authorRequest) {
+    public AuthorResponse createAuthor(@RequestBody @Valid AuthorRequest authorRequest) {
         AuthorVo authorVo = authorMapper.requestToVo(authorRequest);
         authorVo = authorService.createAuthor(authorVo);
         return authorMapper.voToResponse(authorVo);
@@ -55,7 +55,7 @@ public class AuthorController {
 
     @PutMapping("/{authorId}")
     @ResponseStatus(HttpStatus.OK)
-    public AuthorResponse updateAuthor(@PathVariable Long authorId, @RequestBody AuthorRequest authorRequest) {
+    public AuthorResponse updateAuthor(@PathVariable Long authorId, @RequestBody @Valid AuthorRequest authorRequest) {
         AuthorVo authorVo = authorService.updateAuthor(authorId, authorRequest);
         return authorMapper.voToResponse(authorVo);
     }
@@ -63,6 +63,7 @@ public class AuthorController {
     @DeleteMapping("/{authorId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteAuthor(@PathVariable Long authorId) {
+
         authorService.deleteAuthor(authorId);
     }
 }
