@@ -3,6 +3,7 @@ package com.bookhub.service;
 import com.bookhub.domain.exception.AuthorAlreadyBeenDissociatedInTheBookException;
 import com.bookhub.domain.exception.AuthorAlreadyBeenSociatedInTheBookException;
 import com.bookhub.domain.exception.StockAlreadyBeenDissociatedInTheBookException;
+import com.bookhub.domain.exception.StockAlreadyBeenSociatedInTheBookException;
 import com.bookhub.domain.mapper.BookMapper;
 import com.bookhub.domain.model.AuthorModel;
 import com.bookhub.domain.model.BookModel;
@@ -107,6 +108,23 @@ public class BookService {
         if (Boolean.TRUE.equals(bookModel.stockIsNull())) throw new StockAlreadyBeenDissociatedInTheBookException(bookId);
         bookModel.removeStockFromBook();
         bookRepository.save(bookModel);
+    }
+
+    @Transactional
+    public void associateStockInTheBook(Long bookId, Long stockId) {
+        BookModel bookModel = bookRepository.findByIdOrThrowException(bookId);
+        StockModel stockModel = stockRepository.findByIdOrThrowException(stockId);
+        if (Objects.nonNull(bookModel.getStock())) {
+            if (bookModel.getStock().getId() == stockId) {
+                throw new StockAlreadyBeenSociatedInTheBookException(bookId);
+            } else {
+                bookModel.setStock(stockModel);
+                bookRepository.save(bookModel);
+            }
+        } else {
+            bookModel.setStock(stockModel);
+            bookRepository.save(bookModel);
+        }
     }
 
 }

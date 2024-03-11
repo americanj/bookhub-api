@@ -83,4 +83,11 @@ public class BookController {
     public void dissociateStock(@PathVariable Long bookId) {
         bookService.dissociateStockInTheBook(bookId);
     }
+
+    @ResponseStatus(HttpStatus.OK)
+    @PutMapping("/{bookId}/add-stock/{stockId}")
+    public ResponseEntity<Void> sociateStock(@PathVariable Long bookId, @PathVariable Long stockId) {
+        bookService.associateStockInTheBook(bookId, stockId);
+        return ResponseEntity.ok().build();
+    }
 }
