@@ -1,11 +1,9 @@
 package com.bookhub.controller;
 
 import com.bookhub.domain.mapper.BookMapper;
-import com.bookhub.domain.model.BookModel;
 import com.bookhub.domain.request.BookRequest;
 import com.bookhub.domain.response.BookResponse;
 import com.bookhub.domain.vo.BookVo;
-import com.bookhub.repository.BookRepository;
 import com.bookhub.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,9 +28,6 @@ public class BookController {
 
     @Autowired
     private BookMapper bookMapper;
-
-    @Autowired
-    private BookRepository bookRepository;
 
 
     @ResponseStatus(HttpStatus.OK)

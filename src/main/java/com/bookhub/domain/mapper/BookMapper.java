@@ -27,6 +27,8 @@ public abstract class BookMapper {
     }
     public abstract BookVo requestToVo(BookRequest bookRequest);
     public abstract BookModel voToModel(BookVo bookVo);
+
+    @Mapping(target = "price", source = "price")
     public abstract BookModel requestToModel(BookRequest bookRequest);
     @Mapping(target = "id", source = "bookId")
     public abstract BookModel requestToModel(BookRequest bookRequest, Long bookId);

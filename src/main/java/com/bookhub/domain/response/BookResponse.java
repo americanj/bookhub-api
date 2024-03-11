@@ -1,8 +1,6 @@
 package com.bookhub.domain.response;
 
-import com.bookhub.domain.vo.StockVo;
 import lombok.Data;
-
 import java.math.BigDecimal;
 
 @Data
