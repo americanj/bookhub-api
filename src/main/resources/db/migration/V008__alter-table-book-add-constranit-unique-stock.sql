@@ -1,0 +1,1 @@
+ALTER TABLE book ADD CONSTRAINT stock_id UNIQUE (stock_id);

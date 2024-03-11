@@ -5,6 +5,8 @@ import com.bookhub.domain.exception.AuthorAlreadyBeenSociatedInTheBookException;
 import com.bookhub.domain.exception.AuthorNotFoundException;
 import com.bookhub.domain.exception.BookNotFoundException;
 import com.bookhub.domain.exception.EntityInUseException;
+import com.bookhub.domain.exception.StockAlreadyBeenDissociatedInTheBookException;
+import com.bookhub.domain.exception.StockAlreadyBeenSociatedInTheBookException;
 import com.bookhub.domain.exception.StockNotFoundException;
 import com.bookhub.domain.response.ExceptionResponse;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -49,8 +51,21 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exceptionResponse);
     }
 
+    @ExceptionHandler(StockAlreadyBeenDissociatedInTheBookException.class)
+    public ResponseEntity<ExceptionResponse> stockNotFound(StockAlreadyBeenDissociatedInTheBookException exception) {
+        ExceptionResponse exceptionResponse = new ExceptionResponse(exception.getMessage(), LocalDateTime.now());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exceptionResponse);
+    }
+
+
     @ExceptionHandler(AuthorAlreadyBeenSociatedInTheBookException.class)
     public ResponseEntity<ExceptionResponse> authorNotFound(AuthorAlreadyBeenSociatedInTheBookException exception) {
+        ExceptionResponse exceptionResponse = new ExceptionResponse(exception.getMessage(), LocalDateTime.now());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exceptionResponse);
+    }
+
+    @ExceptionHandler(StockAlreadyBeenSociatedInTheBookException.class)
+    public ResponseEntity<ExceptionResponse> authorNotFound(StockAlreadyBeenSociatedInTheBookException exception) {
         ExceptionResponse exceptionResponse = new ExceptionResponse(exception.getMessage(), LocalDateTime.now());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exceptionResponse);
     }

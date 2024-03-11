@@ -31,7 +31,7 @@ public class BookController {
 
 
     @ResponseStatus(HttpStatus.OK)
-    @DeleteMapping("/{bookId}/to-remove-author")
+    @DeleteMapping("/{bookId}/remove-author")
     public void dissociateAuthor(@PathVariable Long bookId) {
         bookService.dissociateAuthorInTheBook(bookId);
     }
@@ -52,30 +52,42 @@ public class BookController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
-    public BookResponse toCreateBook(@RequestBody BookRequest bookRequest) {
-        BookVo bookVo = bookService.toCreateBook(bookRequest);
+    public BookResponse createBook(@RequestBody BookRequest bookRequest) {
+        BookVo bookVo = bookService.createBook(bookRequest);
         return bookMapper.voToResponse(bookVo);
     }
 
     @PutMapping("/{bookId}")
     @ResponseStatus(HttpStatus.OK)
-    public BookResponse toUpdateBook(@PathVariable Long bookId, @RequestBody BookRequest bookRequest) {
-        BookVo bookVo = bookService.toUpdateBook(bookRequest, bookId);
+    public BookResponse updateBook(@PathVariable Long bookId, @RequestBody BookRequest bookRequest) {
+        BookVo bookVo = bookService.updateBook(bookRequest, bookId);
         return bookMapper.voToResponse(bookVo);
     }
 
     @DeleteMapping("/{bookId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public ResponseEntity<Void> toDeleteBook(@PathVariable Long bookId) {
-        bookService.toDeleteBook(bookId);
+    public ResponseEntity<Void> deleteBook(@PathVariable Long bookId) {
+        bookService.deleteBook(bookId);
         return ResponseEntity.noContent().build();
     }
 
     @ResponseStatus(HttpStatus.OK)
-    @PutMapping("/{bookId}/to-add-author/{authorId}")
+    @PutMapping("/{bookId}/add-author/{authorId}")
     public ResponseEntity<Void> sociateAuthor(@PathVariable Long bookId, @PathVariable Long authorId) {
         bookService.associateAuthorInTheBook(bookId, authorId);
         return ResponseEntity.ok().build();
     }
 
+    @ResponseStatus(HttpStatus.OK)
+    @DeleteMapping("/{bookId}/remove-stock")
+    public void dissociateStock(@PathVariable Long bookId) {
+        bookService.dissociateStockInTheBook(bookId);
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @PutMapping("/{bookId}/add-stock/{stockId}")
+    public ResponseEntity<Void> sociateStock(@PathVariable Long bookId, @PathVariable Long stockId) {
+        bookService.associateStockInTheBook(bookId, stockId);
+        return ResponseEntity.ok().build();
+    }
 }

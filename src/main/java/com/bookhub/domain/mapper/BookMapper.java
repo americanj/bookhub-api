@@ -14,6 +14,8 @@ import java.util.stream.Collectors;
 public abstract class BookMapper {
 
     @Mapping(source = "author", target = "author")
+    @Mapping(source = "stock", target = "stock")
+    @Mapping(source = "price", target = "price")
     public abstract BookVo modelToVo(BookModel bookModel);
     public abstract BookResponse voToResponse(BookVo bookVo);
     public abstract BookResponse voToResponse2(BookVo bookVo);
@@ -25,6 +27,8 @@ public abstract class BookMapper {
     }
     public abstract BookVo requestToVo(BookRequest bookRequest);
     public abstract BookModel voToModel(BookVo bookVo);
+
+    @Mapping(target = "price", source = "price")
     public abstract BookModel requestToModel(BookRequest bookRequest);
     @Mapping(target = "id", source = "bookId")
     public abstract BookModel requestToModel(BookRequest bookRequest, Long bookId);
