@@ -31,7 +31,7 @@ public class BookController {
 
 
     @ResponseStatus(HttpStatus.OK)
-    @DeleteMapping("/{bookId}/to-remove-author")
+    @DeleteMapping("/{bookId}/remove-author")
     public void dissociateAuthor(@PathVariable Long bookId) {
         bookService.dissociateAuthorInTheBook(bookId);
     }
@@ -72,10 +72,15 @@ public class BookController {
     }
 
     @ResponseStatus(HttpStatus.OK)
-    @PutMapping("/{bookId}/to-add-author/{authorId}")
+    @PutMapping("/{bookId}/add-author/{authorId}")
     public ResponseEntity<Void> sociateAuthor(@PathVariable Long bookId, @PathVariable Long authorId) {
         bookService.associateAuthorInTheBook(bookId, authorId);
         return ResponseEntity.ok().build();
     }
-}
 
+    @ResponseStatus(HttpStatus.OK)
+    @DeleteMapping("/{bookId}/remove-stock")
+    public void dissociateStock(@PathVariable Long bookId) {
+        bookService.dissociateStockInTheBook(bookId);
+    }
+}

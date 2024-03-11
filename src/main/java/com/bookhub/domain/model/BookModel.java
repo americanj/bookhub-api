@@ -44,13 +44,23 @@ public class BookModel implements Serializable {
     @JoinColumn(name = "stock_id", nullable = true)
     private StockModel stock;
 
-    public void toRemoveAuthorFromBook() {
+    public void removeAuthorFromBook() {
         this.setAuthor(null);
     }
 
     public Boolean authorIsNull() {
         Boolean isNull = false;
         if (Objects.isNull(getAuthor())) isNull = true;
+        return isNull;
+    }
+
+    public void removeStockFromBook() {
+        this.setStock(null);
+    }
+
+    public Boolean stockIsNull() {
+        Boolean isNull = false;
+        if (Objects.isNull(getStock())) isNull = true;
         return isNull;
     }
 }

@@ -2,6 +2,7 @@ package com.bookhub.service;
 
 import com.bookhub.domain.exception.AuthorAlreadyBeenDissociatedInTheBookException;
 import com.bookhub.domain.exception.AuthorAlreadyBeenSociatedInTheBookException;
+import com.bookhub.domain.exception.StockAlreadyBeenDissociatedInTheBookException;
 import com.bookhub.domain.mapper.BookMapper;
 import com.bookhub.domain.model.AuthorModel;
 import com.bookhub.domain.model.BookModel;
@@ -40,7 +41,7 @@ public class BookService {
     public void dissociateAuthorInTheBook(@PathVariable Long bookId) {
         BookModel bookModel = bookRepository.findByIdOrThrowException(bookId);
         if (Boolean.TRUE.equals(bookModel.authorIsNull())) throw new AuthorAlreadyBeenDissociatedInTheBookException(bookId);
-        bookModel.toRemoveAuthorFromBook();
+        bookModel.removeAuthorFromBook();
         bookRepository.save(bookModel);
     }
 
@@ -98,6 +99,14 @@ public class BookService {
             bookModel.setAuthor(authorModel);
             bookRepository.save(bookModel);
         }
+    }
+
+    @Transactional
+    public void dissociateStockInTheBook(@PathVariable Long bookId) {
+        BookModel bookModel = bookRepository.findByIdOrThrowException(bookId);
+        if (Boolean.TRUE.equals(bookModel.stockIsNull())) throw new StockAlreadyBeenDissociatedInTheBookException(bookId);
+        bookModel.removeStockFromBook();
+        bookRepository.save(bookModel);
     }
 
 }
