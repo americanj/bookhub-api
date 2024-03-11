@@ -2,17 +2,16 @@ package com.bookhub.domain.exception.handler;
 
 import com.bookhub.domain.exception.AuthorAlreadyBeenDissociatedInTheBookException;
 import com.bookhub.domain.exception.AuthorAlreadyBeenSociatedInTheBookException;
-import com.bookhub.domain.exception.AuthorNotFoundException;
 import com.bookhub.domain.exception.BookNotFoundException;
 import com.bookhub.domain.exception.EntityInUseException;
 import com.bookhub.domain.exception.StockAlreadyBeenDissociatedInTheBookException;
 import com.bookhub.domain.exception.StockAlreadyBeenSociatedInTheBookException;
 import com.bookhub.domain.exception.StockNotFoundException;
 import com.bookhub.domain.response.ExceptionResponse;
+import com.bookhub.domain.exception.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -24,13 +23,10 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
-
-
 
 @RestControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
@@ -38,11 +34,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @Autowired
     private MessageSource messageSource;
 
-    @ExceptionHandler(AuthorNotFoundException.class)
-    public ResponseEntity<ExceptionResponse> authorNotFound(AuthorNotFoundException exception) {
-        ExceptionResponse exceptionResponse = new ExceptionResponse(exception.getMessage(), LocalDateTime.now());
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exceptionResponse);
-    }
 
     @ExceptionHandler(StockNotFoundException.class)
     public ResponseEntity<ExceptionResponse> stockNotFound(StockNotFoundException exception) {
@@ -55,13 +46,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         ExceptionResponse exceptionResponse = new ExceptionResponse(exception.getMessage(), LocalDateTime.now());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exceptionResponse);
     }
-
-    /*@ExceptionHandler({DataIntegrityViolationException.class, SQLException.class})
-    public ResponseEntity<ExceptionResponse> entityInUse() {
-        EntityInUseException entityInUseException = new EntityInUseException();
-        ExceptionResponse exceptionResponse = new ExceptionResponse(entityInUseException.getMessage(), LocalDateTime.now());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exceptionResponse);
-    }*/
 
     @ExceptionHandler(AuthorAlreadyBeenDissociatedInTheBookException.class)
     public ResponseEntity<ExceptionResponse> authorNotFound(AuthorAlreadyBeenDissociatedInTheBookException exception) {
@@ -88,6 +72,17 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exceptionResponse);
     }
 
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<?> handleEntidadeNaoEncontrada(EntityNotFoundException ex, WebRequest request){
+
+        HttpStatus status = HttpStatus.NOT_FOUND;
+        ProblemType problemType = ProblemType.RECURSO_NAO_ENCONTRADA;
+        String detail = ex.getMessage();
+
+        Problem problem = createProblemBuilder(status, problemType, detail).userMessage(detail).build();
+
+        return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
+    }
 
     @ExceptionHandler(EntityInUseException.class)
     public ResponseEntity<?> handleEntidadeEmUso(EntityInUseException ex, WebRequest request){

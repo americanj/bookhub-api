@@ -1,9 +1,6 @@
 package com.bookhub.domain.exception;
 
-import lombok.Getter;
-
-@Getter
-public class AuthorNotFoundException extends DataBaseException {
+public class AuthorNotFoundException extends EntityNotFoundException {
 
     public AuthorNotFoundException(String message) {
         super(message);
