@@ -34,6 +34,8 @@ public class BookService {
     private StockRepository stockRepository;
 
 
+
+
     @Transactional
     public void dissociateAuthorInTheBook(@PathVariable Long bookId) {
         BookModel bookModel = bookRepository.findByIdOrThrowException(bookId);
@@ -67,8 +69,10 @@ public class BookService {
     public BookVo toUpdateBook(BookRequest bookRequest, Long bookId) {
         bookRepository.findByIdOrThrowException(bookId);
         AuthorModel authorModel = authorRepository.findByIdOrThrowException(bookRequest.getAuthor().getId());
+        StockModel stockModel = stockRepository.findByIdOrThrowException(bookRequest.getStock().getId());
         BookModel bookModel = bookMapper.requestToModel(bookRequest, bookId);
         bookModel.setAuthor(authorModel);
+        bookModel.setStock(stockModel);
         bookModel = bookRepository.save(bookModel);
         return bookMapper.modelToVo(bookModel);
     }
