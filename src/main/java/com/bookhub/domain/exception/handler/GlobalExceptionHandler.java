@@ -68,7 +68,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         ExceptionResponse exceptionResponse = new ExceptionResponse(exception.getMessage(), LocalDateTime.now());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exceptionResponse);
     }
-    
+
     @ExceptionHandler(AuthorAlreadyBeenSociatedInTheBookException.class)
     public ResponseEntity<ExceptionResponse> authorNotFound(AuthorAlreadyBeenSociatedInTheBookException exception) {
         ExceptionResponse exceptionResponse = new ExceptionResponse(exception.getMessage(), LocalDateTime.now());

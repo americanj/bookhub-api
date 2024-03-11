@@ -4,7 +4,6 @@ import com.bookhub.domain.mapper.AuthorMapper;
 import com.bookhub.domain.request.AuthorRequest;
 import com.bookhub.domain.response.AuthorResponse;
 import com.bookhub.domain.vo.AuthorVo;
-import com.bookhub.repository.AuthorRepository;
 import com.bookhub.service.AuthorService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,7 +55,7 @@ public class AuthorController {
 
     @PutMapping("/{authorId}")
     @ResponseStatus(HttpStatus.OK)
-    public AuthorResponse updateAuthor(@PathVariable Long authorId, @RequestBody AuthorRequest authorRequest) {
+    public AuthorResponse updateAuthor(@PathVariable Long authorId, @RequestBody @Valid AuthorRequest authorRequest) {
         AuthorVo authorVo = authorService.updateAuthor(authorId, authorRequest);
         return authorMapper.voToResponse(authorVo);
     }
