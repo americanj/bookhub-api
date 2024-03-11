@@ -12,6 +12,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Objects;
 
 @Data
@@ -31,6 +32,9 @@ public class BookModel implements Serializable {
 
     @Column(nullable = false)
     private String isbn;
+
+    @Column(precision = 10, scale = 2, nullable = false)
+    private BigDecimal price;
 
     @ManyToOne
     @JoinColumn(name = "author_id", nullable = true)
