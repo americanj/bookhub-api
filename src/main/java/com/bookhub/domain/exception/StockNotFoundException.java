@@ -1,6 +1,6 @@
 package com.bookhub.domain.exception;
 
-public class StockNotFoundException extends DataBaseException{
+public class StockNotFoundException extends EntityNotFoundException{
     public StockNotFoundException(String message) {
         super(message);
     }

@@ -4,6 +4,7 @@ import com.bookhub.domain.mapper.BookMapper;
 import com.bookhub.domain.request.BookRequest;
 import com.bookhub.domain.response.BookResponse;
 import com.bookhub.domain.vo.BookVo;
+import com.bookhub.repository.BookRepository;
 import com.bookhub.service.BookService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,9 @@ public class BookController {
 
     @Autowired
     private BookMapper bookMapper;
+
+    @Autowired
+    private BookRepository bookRepository;
 
 
     @ResponseStatus(HttpStatus.OK)
@@ -58,12 +62,12 @@ public class BookController {
         return bookMapper.voToResponse(bookVo);
     }
 
-    @PutMapping("/{bookId}")
+    /*@PutMapping("/{bookId}")
     @ResponseStatus(HttpStatus.OK)
-    public BookResponse updateBook(@PathVariable Long bookId, @RequestBody BookRequest bookRequest) {
+    public BookResponse updateBook(@PathVariable Long bookId, @RequestBody @Valid BookRequest bookRequest) {
         BookVo bookVo = bookService.updateBook(bookRequest, bookId);
         return bookMapper.voToResponse(bookVo);
-    }
+    }*/
 
     @DeleteMapping("/{bookId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)

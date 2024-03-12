@@ -1,6 +1,7 @@
 package com.bookhub.domain.mapper;
 
 import com.bookhub.domain.model.AuthorModel;
+import com.bookhub.domain.request.AuthorIdRequest;
 import com.bookhub.domain.request.AuthorRequest;
 import com.bookhub.domain.response.AuthorResponse;
 import com.bookhub.domain.vo.AuthorVo;

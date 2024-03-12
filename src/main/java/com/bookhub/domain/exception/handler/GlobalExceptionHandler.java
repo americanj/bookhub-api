@@ -2,11 +2,9 @@ package com.bookhub.domain.exception.handler;
 
 import com.bookhub.domain.exception.AuthorAlreadyBeenDissociatedInTheBookException;
 import com.bookhub.domain.exception.AuthorAlreadyBeenSociatedInTheBookException;
-import com.bookhub.domain.exception.BookNotFoundException;
 import com.bookhub.domain.exception.EntityInUseException;
 import com.bookhub.domain.exception.StockAlreadyBeenDissociatedInTheBookException;
 import com.bookhub.domain.exception.StockAlreadyBeenSociatedInTheBookException;
-import com.bookhub.domain.exception.StockNotFoundException;
 import com.bookhub.domain.response.ExceptionResponse;
 import com.bookhub.domain.exception.EntityNotFoundException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
@@ -45,11 +43,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                     "entre em contato com o administrador do sistema.";
 
 
-    @ExceptionHandler(StockNotFoundException.class)
+    /*@ExceptionHandler(StockNotFoundException.class)
     public ResponseEntity<ExceptionResponse> stockNotFound(StockNotFoundException exception) {
         ExceptionResponse exceptionResponse = new ExceptionResponse(exception.getMessage(), LocalDateTime.now());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exceptionResponse);
-    }
+    }*/
 
     @ExceptionHandler(AuthorAlreadyBeenDissociatedInTheBookException.class)
     public ResponseEntity<ExceptionResponse> authorNotFound(AuthorAlreadyBeenDissociatedInTheBookException exception) {

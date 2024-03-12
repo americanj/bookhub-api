@@ -1,6 +1,7 @@
 package com.bookhub.domain.mapper;
 
 import com.bookhub.domain.model.StockModel;
+import com.bookhub.domain.request.StockIdRequest;
 import com.bookhub.domain.response.StockResponse;
 import com.bookhub.domain.vo.StockVo;
 import org.mapstruct.Mapper;

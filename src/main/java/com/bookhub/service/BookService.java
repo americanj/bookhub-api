@@ -5,7 +5,9 @@ import com.bookhub.domain.exception.AuthorAlreadyBeenSociatedInTheBookException;
 import com.bookhub.domain.exception.EntityInUseException;
 import com.bookhub.domain.exception.StockAlreadyBeenDissociatedInTheBookException;
 import com.bookhub.domain.exception.StockAlreadyBeenSociatedInTheBookException;
+import com.bookhub.domain.mapper.AuthorMapper;
 import com.bookhub.domain.mapper.BookMapper;
+import com.bookhub.domain.mapper.StockMapper;
 import com.bookhub.domain.model.AuthorModel;
 import com.bookhub.domain.model.BookModel;
 import com.bookhub.domain.model.StockModel;
@@ -15,7 +17,6 @@ import com.bookhub.repository.AuthorRepository;
 import com.bookhub.repository.BookRepository;
 import com.bookhub.repository.StockRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -40,6 +41,12 @@ public class BookService {
     @Autowired
     private StockRepository stockRepository;
 
+    @Autowired
+    private AuthorMapper authorMapper;
+
+    @Autowired
+    private StockMapper stockMapper;
+
 
     @Transactional
     public void dissociateAuthorInTheBook(@PathVariable Long bookId) {
@@ -62,20 +69,19 @@ public class BookService {
 
     @Transactional
     public BookVo createBook(BookRequest bookRequest) {
-        AuthorModel authorModel = authorRepository.findByIdOrThrowException(bookRequest.getAuthor().getId());
-        StockModel stockModel = stockRepository.findByIdOrThrowException(bookRequest.getStock().getId());
+        AuthorModel authorModel = null;
+        StockModel stockModel = null;
+        if (Objects.nonNull(bookRequest.getAuthorId())) authorModel = authorRepository.findByIdOrThrowException(bookRequest.getAuthorId());
+        if (Objects.nonNull(bookRequest.getStockId())) stockModel = stockRepository.findByIdOrThrowException(bookRequest.getStockId());
+        if (Boolean.TRUE.equals(bookRepository.existsByStockId(stockModel))) throw new EntityInUseException(String.format(MSG_STOCK_ALREADY_IN_USE, stockModel.getId()));
         BookModel bookModel = bookMapper.requestToModel(bookRequest);
         bookModel.setAuthor(authorModel);
         bookModel.setStock(stockModel);
-        try {
-            bookModel = bookRepository.save(bookModel);
-        } catch (DataIntegrityViolationException e) {
-            throw new EntityInUseException(String.format(MSG_STOCK_ALREADY_IN_USE, stockModel.getId()));
-        }
+        bookModel = bookRepository.save(bookModel);
         return bookMapper.modelToVo(bookModel);
     }
 
-    @Transactional
+    /*@Transactional
     public BookVo updateBook(BookRequest bookRequest, Long bookId) {
         bookRepository.findByIdOrThrowException(bookId);
         AuthorModel authorModel = authorRepository.findByIdOrThrowException(bookRequest.getAuthor().getId());
@@ -83,9 +89,14 @@ public class BookService {
         BookModel bookModel = bookMapper.requestToModel(bookRequest, bookId);
         bookModel.setAuthor(authorModel);
         bookModel.setStock(stockModel);
-        bookModel = bookRepository.save(bookModel);
+        try {
+            bookModel = bookRepository.save(bookModel);
+            bookRepository.flush();
+        } catch (DataIntegrityViolationException e) {
+            throw new EntityInUseException(String.format(MSG_STOCK_ALREADY_IN_USE, stockModel.getId()));
+        }
         return bookMapper.modelToVo(bookModel);
-    }
+    }*/
 
     @Transactional
     public void deleteBook(Long bookId) {

@@ -19,6 +19,6 @@ public class BookRequest {
     @NotNull
     private BigDecimal price;
 
-    private StockIdRequest stock;
-    private AuthorIdRequest author;
+    private Long authorId;
+    private Long stockId;
 }
