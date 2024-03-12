@@ -65,11 +65,10 @@ public class BookService {
         AuthorModel authorModel = authorRepository.findByIdOrThrowException(bookRequest.getAuthor().getId());
         StockModel stockModel = stockRepository.findByIdOrThrowException(bookRequest.getStock().getId());
         BookModel bookModel = bookMapper.requestToModel(bookRequest);
+        bookModel.setAuthor(authorModel);
+        bookModel.setStock(stockModel);
         try {
-            bookModel.setAuthor(authorModel);
-            bookModel.setStock(stockModel);
             bookModel = bookRepository.save(bookModel);
-
         } catch (DataIntegrityViolationException e) {
             throw new EntityInUseException(String.format(MSG_STOCK_ALREADY_IN_USE, stockModel.getId()));
         }
