@@ -51,12 +51,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exceptionResponse);
     }
 
-    @ExceptionHandler(BookNotFoundException.class)
-    public ResponseEntity<ExceptionResponse> authorNotFound(BookNotFoundException exception) {
-        ExceptionResponse exceptionResponse = new ExceptionResponse(exception.getMessage(), LocalDateTime.now());
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exceptionResponse);
-    }
-
     @ExceptionHandler(AuthorAlreadyBeenDissociatedInTheBookException.class)
     public ResponseEntity<ExceptionResponse> authorNotFound(AuthorAlreadyBeenDissociatedInTheBookException exception) {
         ExceptionResponse exceptionResponse = new ExceptionResponse(exception.getMessage(), LocalDateTime.now());
