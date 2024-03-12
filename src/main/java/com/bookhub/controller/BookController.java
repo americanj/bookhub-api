@@ -5,6 +5,7 @@ import com.bookhub.domain.request.BookRequest;
 import com.bookhub.domain.response.BookResponse;
 import com.bookhub.domain.vo.BookVo;
 import com.bookhub.service.BookService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -52,7 +53,7 @@ public class BookController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
-    public BookResponse createBook(@RequestBody BookRequest bookRequest) {
+    public BookResponse createBook(@RequestBody @Valid BookRequest bookRequest) {
         BookVo bookVo = bookService.createBook(bookRequest);
         return bookMapper.voToResponse(bookVo);
     }
