@@ -17,6 +17,7 @@ import com.bookhub.repository.AuthorRepository;
 import com.bookhub.repository.BookRepository;
 import com.bookhub.repository.StockRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -78,14 +79,17 @@ public class BookService {
         bookModel.setAuthor(authorModel);
         bookModel.setStock(stockModel);
         bookModel = bookRepository.save(bookModel);
+        bookRepository.flush();
         return bookMapper.modelToVo(bookModel);
     }
 
-    /*@Transactional
+    @Transactional
     public BookVo updateBook(BookRequest bookRequest, Long bookId) {
         bookRepository.findByIdOrThrowException(bookId);
-        AuthorModel authorModel = authorRepository.findByIdOrThrowException(bookRequest.getAuthor().getId());
-        StockModel stockModel = stockRepository.findByIdOrThrowException(bookRequest.getStock().getId());
+        AuthorModel authorModel = null;
+        StockModel stockModel = null;
+        if (Objects.nonNull(bookRequest.getAuthorId())) authorModel = authorRepository.findByIdOrThrowException(bookRequest.getAuthorId());
+        if (Objects.nonNull(bookRequest.getStockId())) stockModel = stockRepository.findByIdOrThrowException(bookRequest.getStockId());
         BookModel bookModel = bookMapper.requestToModel(bookRequest, bookId);
         bookModel.setAuthor(authorModel);
         bookModel.setStock(stockModel);
@@ -96,7 +100,7 @@ public class BookService {
             throw new EntityInUseException(String.format(MSG_STOCK_ALREADY_IN_USE, stockModel.getId()));
         }
         return bookMapper.modelToVo(bookModel);
-    }*/
+    }
 
     @Transactional
     public void deleteBook(Long bookId) {

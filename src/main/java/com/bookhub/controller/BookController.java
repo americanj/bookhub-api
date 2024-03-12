@@ -62,12 +62,12 @@ public class BookController {
         return bookMapper.voToResponse(bookVo);
     }
 
-    /*@PutMapping("/{bookId}")
+    @PutMapping("/{bookId}")
     @ResponseStatus(HttpStatus.OK)
     public BookResponse updateBook(@PathVariable Long bookId, @RequestBody @Valid BookRequest bookRequest) {
         BookVo bookVo = bookService.updateBook(bookRequest, bookId);
         return bookMapper.voToResponse(bookVo);
-    }*/
+    }
 
     @DeleteMapping("/{bookId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
