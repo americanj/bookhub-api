@@ -4,7 +4,9 @@ import com.bookhub.domain.mapper.BookMapper;
 import com.bookhub.domain.request.BookRequest;
 import com.bookhub.domain.response.BookResponse;
 import com.bookhub.domain.vo.BookVo;
+import com.bookhub.repository.BookRepository;
 import com.bookhub.service.BookService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +31,9 @@ public class BookController {
     @Autowired
     private BookMapper bookMapper;
 
+    @Autowired
+    private BookRepository bookRepository;
+
 
     @ResponseStatus(HttpStatus.OK)
     @DeleteMapping("/{bookId}/remove-author")
@@ -52,14 +57,14 @@ public class BookController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
-    public BookResponse createBook(@RequestBody BookRequest bookRequest) {
+    public BookResponse createBook(@RequestBody @Valid BookRequest bookRequest) {
         BookVo bookVo = bookService.createBook(bookRequest);
         return bookMapper.voToResponse(bookVo);
     }
 
     @PutMapping("/{bookId}")
     @ResponseStatus(HttpStatus.OK)
-    public BookResponse updateBook(@PathVariable Long bookId, @RequestBody BookRequest bookRequest) {
+    public BookResponse updateBook(@PathVariable Long bookId, @RequestBody @Valid BookRequest bookRequest) {
         BookVo bookVo = bookService.updateBook(bookRequest, bookId);
         return bookMapper.voToResponse(bookVo);
     }

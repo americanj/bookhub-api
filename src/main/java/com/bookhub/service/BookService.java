@@ -2,6 +2,7 @@ package com.bookhub.service;
 
 import com.bookhub.domain.exception.AuthorAlreadyBeenDissociatedInTheBookException;
 import com.bookhub.domain.exception.AuthorAlreadyBeenSociatedInTheBookException;
+import com.bookhub.domain.exception.EntityInUseException;
 import com.bookhub.domain.exception.StockAlreadyBeenDissociatedInTheBookException;
 import com.bookhub.domain.exception.StockAlreadyBeenSociatedInTheBookException;
 import com.bookhub.domain.mapper.BookMapper;
@@ -14,6 +15,7 @@ import com.bookhub.repository.AuthorRepository;
 import com.bookhub.repository.BookRepository;
 import com.bookhub.repository.StockRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,6 +24,8 @@ import java.util.Objects;
 
 @Service
 public class BookService {
+
+    private static String MSG_STOCK_ALREADY_IN_USE = "O stock de código: %d já está em uso por outro livro!";
 
     @Autowired
     private BookRepository bookRepository;
@@ -56,24 +60,35 @@ public class BookService {
 
     @Transactional
     public BookVo createBook(BookRequest bookRequest) {
-        AuthorModel authorModel = authorRepository.findByIdOrThrowException(bookRequest.getAuthor().getId());
-        StockModel stockModel = stockRepository.findByIdOrThrowException(bookRequest.getStock().getId());
+        AuthorModel authorModel = null;
+        StockModel stockModel = null;
+        if (Objects.nonNull(bookRequest.getAuthorId())) authorModel = authorRepository.findByIdOrThrowException(bookRequest.getAuthorId());
+        if (Objects.nonNull(bookRequest.getStockId())) stockModel = stockRepository.findByIdOrThrowException(bookRequest.getStockId());
+        if (Boolean.TRUE.equals(bookRepository.existsByStockId(stockModel))) throw new EntityInUseException(String.format(MSG_STOCK_ALREADY_IN_USE, stockModel.getId()));
         BookModel bookModel = bookMapper.requestToModel(bookRequest);
         bookModel.setAuthor(authorModel);
         bookModel.setStock(stockModel);
         bookModel = bookRepository.save(bookModel);
+        bookRepository.flush();
         return bookMapper.modelToVo(bookModel);
     }
 
     @Transactional
     public BookVo updateBook(BookRequest bookRequest, Long bookId) {
         bookRepository.findByIdOrThrowException(bookId);
-        AuthorModel authorModel = authorRepository.findByIdOrThrowException(bookRequest.getAuthor().getId());
-        StockModel stockModel = stockRepository.findByIdOrThrowException(bookRequest.getStock().getId());
+        AuthorModel authorModel = null;
+        StockModel stockModel = null;
+        if (Objects.nonNull(bookRequest.getAuthorId())) authorModel = authorRepository.findByIdOrThrowException(bookRequest.getAuthorId());
+        if (Objects.nonNull(bookRequest.getStockId())) stockModel = stockRepository.findByIdOrThrowException(bookRequest.getStockId());
         BookModel bookModel = bookMapper.requestToModel(bookRequest, bookId);
         bookModel.setAuthor(authorModel);
         bookModel.setStock(stockModel);
-        bookModel = bookRepository.save(bookModel);
+        try {
+            bookModel = bookRepository.save(bookModel);
+            bookRepository.flush();
+        } catch (DataIntegrityViolationException e) {
+            throw new EntityInUseException(String.format(MSG_STOCK_ALREADY_IN_USE, stockModel.getId()));
+        }
         return bookMapper.modelToVo(bookModel);
     }
 
@@ -87,17 +102,9 @@ public class BookService {
     public void associateAuthorInTheBook(Long bookId, Long authorId) {
         BookModel bookModel = bookRepository.findByIdOrThrowException(bookId);
         AuthorModel authorModel = authorRepository.findByIdOrThrowException(authorId);
-        if (Objects.nonNull(bookModel.getAuthor())) {
-            if (bookModel.getAuthor().getId() == authorId) {
-                throw new AuthorAlreadyBeenSociatedInTheBookException(bookId);
-            } else {
-                bookModel.setAuthor(authorModel);
-                bookRepository.save(bookModel);
-            }
-        } else {
-            bookModel.setAuthor(authorModel);
-            bookRepository.save(bookModel);
-        }
+        if (bookModel.getAuthor() != null && bookModel.getAuthor().getId().equals(authorId)) throw new AuthorAlreadyBeenSociatedInTheBookException(bookId);
+        bookModel.setAuthor(authorModel);
+        bookRepository.save(bookModel);
     }
 
     @Transactional
@@ -112,17 +119,10 @@ public class BookService {
     public void associateStockInTheBook(Long bookId, Long stockId) {
         BookModel bookModel = bookRepository.findByIdOrThrowException(bookId);
         StockModel stockModel = stockRepository.findByIdOrThrowException(stockId);
-        if (Objects.nonNull(bookModel.getStock())) {
-            if (bookModel.getStock().getId() == stockId) {
-                throw new StockAlreadyBeenSociatedInTheBookException(bookId);
-            } else {
-                bookModel.setStock(stockModel);
-                bookRepository.save(bookModel);
-            }
-        } else {
-            bookModel.setStock(stockModel);
-            bookRepository.save(bookModel);
-        }
+        if (bookModel.getStock() != null && bookModel.getStock().getId().equals(stockId)) throw new StockAlreadyBeenSociatedInTheBookException(bookId);
+        if (bookRepository.existsByStockId(stockModel)) throw new EntityInUseException(String.format(MSG_STOCK_ALREADY_IN_USE, stockModel.getId()));
+        bookModel.setStock(stockModel);
+        bookRepository.save(bookModel);
     }
 
 }

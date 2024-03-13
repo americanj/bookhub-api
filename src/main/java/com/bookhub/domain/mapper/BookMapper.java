@@ -25,11 +25,16 @@ public abstract class BookMapper {
     public List<BookResponse> vosToResponses(List<BookVo> bookVos) {
         return bookVos.stream().map(this::voToResponse).collect(Collectors.toList());
     }
+
+    @Mapping(target = "author.id", source = "authorId")
+    @Mapping(target = "stock.id", source = "stockId")
     public abstract BookVo requestToVo(BookRequest bookRequest);
+
     public abstract BookModel voToModel(BookVo bookVo);
 
     @Mapping(target = "price", source = "price")
     public abstract BookModel requestToModel(BookRequest bookRequest);
+
     @Mapping(target = "id", source = "bookId")
     public abstract BookModel requestToModel(BookRequest bookRequest, Long bookId);
 }

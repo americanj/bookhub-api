@@ -1,6 +1,6 @@
 package com.bookhub.domain.exception;
 
-public class BookNotFoundException extends DataBaseException{
+public class BookNotFoundException extends EntityNotFoundException{
     public BookNotFoundException(String message) {
         super(message);
     }

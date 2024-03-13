@@ -12,11 +12,11 @@ import java.util.List;
 public class Problem {
 
     private Integer status;
+    private OffsetDateTime timestamp;
     private String type;
     private String title;
     private String detail;
 
-    private OffsetDateTime timestamp;
     private String userMessage;
 
     private List<Object> objects;

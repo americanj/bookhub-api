@@ -1,13 +1,8 @@
 package com.bookhub.domain.exception.handler;
 
-import com.bookhub.domain.exception.AuthorAlreadyBeenDissociatedInTheBookException;
-import com.bookhub.domain.exception.AuthorAlreadyBeenSociatedInTheBookException;
-import com.bookhub.domain.exception.BookNotFoundException;
+import com.bookhub.domain.exception.EntityAlreadyBeenDissociatedInTheBookException;
+import com.bookhub.domain.exception.EntityAlreadyBeenSociatedInTheBookException;
 import com.bookhub.domain.exception.EntityInUseException;
-import com.bookhub.domain.exception.StockAlreadyBeenDissociatedInTheBookException;
-import com.bookhub.domain.exception.StockAlreadyBeenSociatedInTheBookException;
-import com.bookhub.domain.exception.StockNotFoundException;
-import com.bookhub.domain.response.ExceptionResponse;
 import com.bookhub.domain.exception.EntityNotFoundException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.fasterxml.jackson.databind.exc.PropertyBindingException;
@@ -27,7 +22,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -44,103 +38,65 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                     "Tente novamente e se o problema persistir, " +
                     "entre em contato com o administrador do sistema.";
 
-
-    @ExceptionHandler(StockNotFoundException.class)
-    public ResponseEntity<ExceptionResponse> stockNotFound(StockNotFoundException exception) {
-        ExceptionResponse exceptionResponse = new ExceptionResponse(exception.getMessage(), LocalDateTime.now());
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exceptionResponse);
-    }
-
-    @ExceptionHandler(BookNotFoundException.class)
-    public ResponseEntity<ExceptionResponse> authorNotFound(BookNotFoundException exception) {
-        ExceptionResponse exceptionResponse = new ExceptionResponse(exception.getMessage(), LocalDateTime.now());
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exceptionResponse);
-    }
-
-    @ExceptionHandler(AuthorAlreadyBeenDissociatedInTheBookException.class)
-    public ResponseEntity<ExceptionResponse> authorNotFound(AuthorAlreadyBeenDissociatedInTheBookException exception) {
-        ExceptionResponse exceptionResponse = new ExceptionResponse(exception.getMessage(), LocalDateTime.now());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exceptionResponse);
-    }
-
-    @ExceptionHandler(StockAlreadyBeenDissociatedInTheBookException.class)
-    public ResponseEntity<ExceptionResponse> stockNotFound(StockAlreadyBeenDissociatedInTheBookException exception) {
-        ExceptionResponse exceptionResponse = new ExceptionResponse(exception.getMessage(), LocalDateTime.now());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exceptionResponse);
-    }
-
-    @ExceptionHandler(AuthorAlreadyBeenSociatedInTheBookException.class)
-    public ResponseEntity<ExceptionResponse> authorNotFound(AuthorAlreadyBeenSociatedInTheBookException exception) {
-        ExceptionResponse exceptionResponse = new ExceptionResponse(exception.getMessage(), LocalDateTime.now());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exceptionResponse);
-    }
-
-    @ExceptionHandler(StockAlreadyBeenSociatedInTheBookException.class)
-    public ResponseEntity<ExceptionResponse> authorNotFound(StockAlreadyBeenSociatedInTheBookException exception) {
-        ExceptionResponse exceptionResponse = new ExceptionResponse(exception.getMessage(), LocalDateTime.now());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exceptionResponse);
-    }
-
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<?> handleEntidadeNaoEncontrada(EntityNotFoundException ex, WebRequest request) {
-
         HttpStatus status = HttpStatus.NOT_FOUND;
         ProblemType problemType = ProblemType.RECURSO_NAO_ENCONTRADA;
         String detail = ex.getMessage();
-
         Problem problem = createProblemBuilder(status, problemType, detail).userMessage(detail).build();
+        return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
+    }
 
+    @ExceptionHandler(EntityAlreadyBeenDissociatedInTheBookException.class)
+    public ResponseEntity<?> handleEntidadeEmUso(EntityAlreadyBeenDissociatedInTheBookException ex, WebRequest request) {
+        HttpStatus status = HttpStatus.CONFLICT;
+        ProblemType problemType = ProblemType.ENTIDADE_JA_DISSOCIADA;
+        String detail = ex.getMessage();
+        Problem problem = createProblemBuilder(status, problemType, detail).userMessage(detail).build();
+        return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
+    }
+
+    @ExceptionHandler(EntityAlreadyBeenSociatedInTheBookException.class)
+    public ResponseEntity<?> handleEntidadeEmUso(EntityAlreadyBeenSociatedInTheBookException ex, WebRequest request) {
+        HttpStatus status = HttpStatus.CONFLICT;
+        ProblemType problemType = ProblemType.ENTIDADE_JA_ASSOCIADA;
+        String detail = ex.getMessage();
+        Problem problem = createProblemBuilder(status, problemType, detail).userMessage(detail).build();
         return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
     }
 
     @ExceptionHandler(EntityInUseException.class)
     public ResponseEntity<?> handleEntidadeEmUso(EntityInUseException ex, WebRequest request) {
-
         HttpStatus status = HttpStatus.CONFLICT;
         ProblemType problemType = ProblemType.ENTIDADE_EM_USO;
         String detail = ex.getMessage();
-
-        Problem problem = createProblemBuilder(status, problemType, detail)
-                .userMessage(detail)
-                .build();
-
+        Problem problem = createProblemBuilder(status, problemType, detail).userMessage(detail).build();
         return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
     }
 
     @Override
     protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
-
         Throwable rootCause = ExceptionUtils.getRootCause(ex);
-
         if (rootCause instanceof InvalidFormatException) {
             return handleInvalidFormat((InvalidFormatException) rootCause, headers, status, request);
         } else if (rootCause instanceof PropertyBindingException) {
             return handlePropertyBinding((PropertyBindingException) rootCause, headers, status, request);
         }
-
         ProblemType problemType = ProblemType.MENSAGEM_INCOMPREENSIVEL;
         String detail = "O corpo da requisição está inválido. Verifique erro de sintaxe.";
-
-        Problem problem = createProblemBuilder((HttpStatus) status, problemType, detail)
-                .userMessage(MSG_ERRO_GENERICA_USUARIO_FINAL)
-                .build();
-
+        Problem problem = createProblemBuilder((HttpStatus) status, problemType, detail).userMessage(MSG_ERRO_GENERICA_USUARIO_FINAL).build();
         return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
     }
 
     private ResponseEntity<Object> handleInvalidFormat(InvalidFormatException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
-
         String path = joinPath(ex.getPath());
-
         ProblemType problemType = ProblemType.MENSAGEM_INCOMPREENSIVEL;
         String detail = String.format("A propriedade '%s' recebeu o valor '%s', " +
                 "que é de um tipo inválido. Corrija e informe um valor compatível " +
                 "com o tipo %s.", path, ex.getValue(), ex.getTargetType().getSimpleName());
-
         Problem problem = createProblemBuilder((HttpStatus) status, problemType, detail)
                 .userMessage(MSG_ERRO_GENERICA_USUARIO_FINAL)
                 .build();
-
         return handleExceptionInternal(ex, problem, headers, status, request);
     }
 

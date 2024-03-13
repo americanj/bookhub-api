@@ -9,6 +9,7 @@ import org.springframework.web.servlet.i18n.AcceptHeaderLocaleResolver;
 import java.util.Locale;
 
 @SpringBootApplication
+//@EnableJpaRepositories(repositoryBaseClass = CustomJpaRepository.class)
 public class BookhubApplication {
 
 	public static void main(String[] args) {

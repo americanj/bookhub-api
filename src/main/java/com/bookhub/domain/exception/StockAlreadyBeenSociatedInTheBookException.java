@@ -4,7 +4,7 @@ package com.bookhub.domain.exception;
 import lombok.Getter;
 
 @Getter
-public class StockAlreadyBeenSociatedInTheBookException extends BusinessException {
+public class StockAlreadyBeenSociatedInTheBookException extends EntityAlreadyBeenSociatedInTheBookException {
 
     private static final long serialVersionUID = 1L;
 
