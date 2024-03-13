@@ -1,10 +1,9 @@
 package com.bookhub.domain.exception;
 
-
 import lombok.Getter;
 
 @Getter
-public class AuthorAlreadyBeenDissociatedInTheBookException extends BusinessException {
+public class AuthorAlreadyBeenDissociatedInTheBookException extends EntityAlreadyBeenDissociatedInTheBookException {
 
     private static final long serialVersionUID = 1L;
 

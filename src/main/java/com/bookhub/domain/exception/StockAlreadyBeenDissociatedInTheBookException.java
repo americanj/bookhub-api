@@ -1,6 +1,6 @@
 package com.bookhub.domain.exception;
 
-public class StockAlreadyBeenDissociatedInTheBookException extends BusinessException {
+public class StockAlreadyBeenDissociatedInTheBookException extends EntityAlreadyBeenDissociatedInTheBookException {
 
     private static final long serialVersionUID = 1L;
 

@@ -1,11 +1,7 @@
 package com.bookhub.domain.mapper;
 
-import com.bookhub.domain.model.AuthorModel;
 import com.bookhub.domain.model.BookModel;
-import com.bookhub.domain.model.StockModel;
-import com.bookhub.domain.request.AuthorIdRequest;
 import com.bookhub.domain.request.BookRequest;
-import com.bookhub.domain.request.StockIdRequest;
 import com.bookhub.domain.response.BookResponse;
 import com.bookhub.domain.vo.BookVo;
 import org.mapstruct.Mapper;
